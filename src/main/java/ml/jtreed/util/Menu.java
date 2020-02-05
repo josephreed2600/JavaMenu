@@ -1,6 +1,7 @@
 package ml.jtreed.util;
 
 import java.util.function.Function;
+import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,14 +18,18 @@ public class Menu {
 	private BufferedReader cin;// = new BufferedReader(new InputStreamReader(System.in));
 	private PrintStream cout;
 
-	public Menu(String preamble, String[] options, String prompt, Runnable[] functions, boolean exit, InputStream cinCore, PrintStream cout) {
+	public Menu(String preamble, String[] options, String prompt, Runnable[] functions, boolean exit, InputStream cin, PrintStream cout) {
+		this(preamble, options, prompt, functions, exit, (new BufferedReader(new InputStreamReader(cin))), cout);
+	}
+
+	public Menu(String preamble, String[] options, String prompt, Runnable[] functions, boolean exit, BufferedReader cin, PrintStream cout) {
 		this.preamble = preamble;
 		this.options = options;
 		this.prompt = prompt;
 		this.functions = functions;
 		this.exit = exit;
 
-		this.cin = new BufferedReader(new InputStreamReader(System.in));
+		this.cin = cin;
 		this.cout = cout;
 	}
 	
@@ -51,7 +56,7 @@ public class Menu {
 			try {
 				cout.println("[DEBUG ]\tRequesting input");
 				String input = cin.readLine();
-				cout.println("[DEBUG ]\tGot input: " + input);
+				cout.println("[DEBUG ]\tGot input: " + selection);
 				selection = Integer.parseInt(input);
 			} catch(IOException ioe) {
 				cout.println("Something sad happened :(");

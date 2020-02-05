@@ -1,5 +1,8 @@
 package ml.jtreed.util;
 
+import java.util.Scanner;
+import java.io.*;
+
 public class Controller {
 	Menu menu;
 	public Controller() {
@@ -22,6 +25,7 @@ public class Controller {
 
 	public void run() {
 		//System.out.print(menu);
+		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		menu.enter();
 	}
 

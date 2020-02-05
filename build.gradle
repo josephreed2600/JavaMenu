@@ -32,3 +32,15 @@ application {
     // Define the main class for the application.
     mainClassName = 'ml.jtreed.util.App'
 }
+
+run {
+ standardInput = System.in
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'ml.jtreed.util.App'
+    }
+    baseName = 'all-in-one-jar'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
