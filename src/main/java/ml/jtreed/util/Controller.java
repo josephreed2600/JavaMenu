@@ -18,15 +18,12 @@ public class Controller {
 				this::foo,
 				this::bar
 				},
-			true,
-			System.in,
-			System.out);
+			true);
 	}
 
 	public void run() {
-		//System.out.print(menu);
-		//BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-		menu.enter();
+		menu.enter(new BufferedReader(new InputStreamReader(System.in)),
+				System.out);
 	}
 
 

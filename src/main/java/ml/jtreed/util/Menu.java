@@ -15,22 +15,17 @@ public class Menu {
 	private boolean exit;
 	private Runnable[] functions;
 
-	private BufferedReader cin;// = new BufferedReader(new InputStreamReader(System.in));
-	private PrintStream cout;
-
-	public Menu(String preamble, String[] options, String prompt, Runnable[] functions, boolean exit, InputStream cin, PrintStream cout) {
-		this(preamble, options, prompt, functions, exit, (new BufferedReader(new InputStreamReader(cin))), cout);
-	}
-
-	public Menu(String preamble, String[] options, String prompt, Runnable[] functions, boolean exit, BufferedReader cin, PrintStream cout) {
+	public Menu(String preamble, String[] options, String prompt, Runnable[] functions, boolean exit) {
+		if(exit) {
+			if(options.length-1 != functions.length) throw new IllegalArgumentException("Menu requires the same number of option names as methods (excluding exit option)");
+		} else {
+			if(options.length != functions.length) throw new IllegalArgumentException("Menu requires the same number of option names as methods");
+		}
 		this.preamble = preamble;
 		this.options = options;
 		this.prompt = prompt;
 		this.functions = functions;
 		this.exit = exit;
-
-		this.cin = cin;
-		this.cout = cout;
 	}
 	
 	@Override
@@ -48,15 +43,13 @@ public class Menu {
 
 	public String getPrompt() { return prompt; }
 
-	public void enter() {
+	public void enter(BufferedReader cin, PrintStream cout) {
 		Integer selection = null;
 		boolean showFullMenu = true;
 		do {
 			System.out.print(showFullMenu?this:this.getPrompt());
 			try {
-				cout.println("[DEBUG ]\tRequesting input");
 				String input = cin.readLine();
-				cout.println("[DEBUG ]\tGot input: " + selection);
 				selection = Integer.parseInt(input);
 			} catch(IOException ioe) {
 				cout.println("Something sad happened :(");
@@ -69,14 +62,18 @@ public class Menu {
 				showFullMenu = false;
 				continue;
 			}
-			if(selection > functions.length) {
+			if(selection == 0 && exit) {
+				selection = null;
+				continue;
+			}
+			if(selection > functions.length || selection < 1) {
 				cout.println("Selection out of range");
 				showFullMenu = false;
 				continue;
 			}
+			cout.print('\n');
 			functions[selection-1].run();
 			showFullMenu = true;
-		} while(selection == null || selection > 0);
+		} while(selection != null);
 	}
-
 }
